@@ -19,6 +19,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 import org.testng.asserts.Assertion;
@@ -32,20 +33,22 @@ import org.testng.asserts.SoftAssert;
 	  public void   Browser() throws InterruptedException{
     	
 			
-    		System.setProperty("webdriver.chrome.driver", "C://Users//Admin//Downloads//chromedriver.exe");
-    		 driver= new ChromeDriver();
-    		 
-    		String baseURL= "https://ibo--pspdev2.sandbox.my.site.com/ibportal/IBPortalLogin";
-    		 this.driver.get(baseURL);
+		System.setProperty("webdriver.gecko.driver", "C:/Users/Omer.Ejaz/Downloads/geckodriver-v0.33.0-win64/geckodriver.exe");
+    		 driver= new FirefoxDriver();
+    		 Thread.sleep(3000);
+    		String baseURL= "https://ibo--pspdev2.sandbox.my.site.com/ibportal/IBPortalRegistration";
+    		 driver.get(baseURL);
+    		 driver.navigate().to(baseURL);
     		 driver.manage().window().maximize();
     		 
-    		 System.out.println("Chrome Browser open successfully.");
+    		 System.out.println("Firefox Browser open successfully.");
     		 Thread.sleep(3000);
+    		 
     		
     	}
 
     @Test (dataProvider="LoginDataProvider",dataProviderClass= Login_Credentials.class) 
-    public void Login_1(String username, String password) {
+    public void Login_1(String firstname, String lastname, String email, String confirm_email) {
 		 
 			try 
 			{
@@ -53,23 +56,39 @@ import org.testng.asserts.SoftAssert;
 
                Thread.sleep(1000);
 				 
-				driver.findElement(By.id("PimsLogin:IBPortalSiteTemplate:loginForm:username")).sendKeys(username);
+				driver.findElement(By.xpath("//input[@id=\"IBPortalREgistration:IBPortalSiteTemplate:signUpForm:contfirstNameId\"]")).sendKeys(firstname);
 				Thread.sleep(2000);
-				driver.findElement(By.id("PimsLogin:IBPortalSiteTemplate:loginForm:password")).sendKeys(password);
+				driver.findElement(By.xpath("//input[@id=\"IBPortalREgistration:IBPortalSiteTemplate:signUpForm:contlastNameId\"]")).sendKeys(lastname);
 				Thread.sleep(2000);
-				driver.findElement(By.id("PimsLogin:IBPortalSiteTemplate:loginForm:loginButton")).click();
-				Thread.sleep(2000);
-				
-				System.out.println("IB login successfully!");
-				Thread.sleep(3000);
-				 driver.get("https://ibo--pspdev2.sandbox.my.site.com/pims/PimsDashboard");
-				 Thread.sleep(4000);
+				driver.findElement(By.xpath("//input[@id=\"homeEmailId\"]")).sendKeys(email);
+				driver.findElement(By.xpath("//input[@id=\"confEmailId\"]")).sendKeys(confirm_email);
+				System.out.println("IB user register successfully!");
+				Thread.sleep(3000);	
 			}
 				
 				catch(Exception e) {
-					System.out.println("IB Failed to login!");
+					System.out.println("IB user Failed to register!");
 				}
+			
 		}
+    //If want to disable the test case, we can use enabled=false
+    @Test(enabled=false,dataProvider="LoginDataProvider1",dataProviderClass=data123.class)
+     void sanam(String Address, String org_email) {
+    	try {
+		driver.findElement(By.xpath("//input[@id=\"IBPortalREgistration:IBPortalSiteTemplate:signUpForm:birthLocaleId\"]")).sendKeys(Address);
+		driver.findElement(By.xpath("//input[@id=\"IBPortalREgistration:IBPortalSiteTemplate:signUpForm:schoolEmailId\"]")).sendKeys(org_email);
+    	}
+    	catch(Exception e)
+    	{
+    		System.out.println("error");
+    	}
+    }
+    @AfterMethod
+    public void after() {
+    	
+    }
+ }
+    /*
      @Test
      public void dashboard() throws InterruptedException {
     	 JavascriptExecutor scroll_down = (JavascriptExecutor)driver;
@@ -95,7 +114,7 @@ import org.testng.asserts.SoftAssert;
      public void next_button() throws InterruptedException {
     	
     	 
-    	 //driver.findElement(By.xpath("//button[@title=\"Next\"]")).click();
+    	
     	 
     	
 
@@ -136,14 +155,14 @@ import org.testng.asserts.SoftAssert;
     		 Thread.sleep(3000);
     		 driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
     		 
-    		 ////span[contains(text(),'1. Does the school ensure that all teachers meet the local/state/national and any other relevant requirements for the roles to which they have been appointed?')]
+    		 ////span[contains(text(),'1. Does the school ensure thatï¿½all teachers meet the local/state/national and any other relevant requirements for the roles to which they have been appointed?')]
 //    	 driver.findElement(By.xpath("//span[@title=\"Student support 1: The school provides relevant human, natural, built and virtual resources to implement its IB programme(s). (0202-01)\"]")).click();
     	 Thread.sleep(6000);
     	 driver.findElement(By.xpath("/html[1]/body[1]/div[3]/c-ib-psp-forms[1]/lightning-layout[1]/slot[1]/lightning-layout-item[2]/slot[1]/lightning-accordion[1]/slot[1]/lightning-accordion-section[1]/section[1]/div[1]/h3[1]/button[1]/span[1]")).click();
     	 
-    	 String txt1= "1. Does the school ensure that all teachers meet the local/state/national and any other relevant requirements for the roles to which they have been appointed?";
+    	 String txt1= "1. Does the school ensure thatï¿½all teachers meet the local/state/national and any other relevant requirements for the roles to which they have been appointed?";
     	 
-    	 WebElement el12= driver.findElement(By.xpath("//span[contains(text(),'1. Does the school ensure that all teachers meet the local/state/national and any other relevant requirements for the roles to which they have been appointed?')]"));
+    	 WebElement el12= driver.findElement(By.xpath("//span[contains(text(),'1. Does the school ensure thatï¿½all teachers meet the local/state/national and any other relevant requirements for the roles to which they have been appointed?')]"));
     	
     	 String abc=el12.getAttribute("textContent");
     	 if(el12.isEnabled() && abc.contains("1. Does the school ensure that all teachers meet the local/state/national and any other relevant requirements for the roles to which they have been appointed?"));
@@ -256,157 +275,6 @@ import org.testng.asserts.SoftAssert;
        
      
      }
-     @Test
-     public void Document() throws InterruptedException {
-    	 driver.findElement(By.xpath("/html[1]/body[1]/div[3]/c-ib-psp-forms[1]/lightning-layout[1]/slot[1]/lightning-layout-item[2]/slot[1]/lightning-layout-item[1]/slot[1]/c-ib-psp-documents-section[1]/div[3]/div[2]/lightning-button[1]/button[1]")).click();
-    	 driver.findElement(By.xpath("/html[1]/body[1]/div[3]/c-ib-psp-forms[1]/lightning-layout[1]/slot[1]/lightning-layout-item[2]/slot[1]/lightning-layout-item[1]/slot[1]/c-ib-psp-documents-section[1]/c-custom-modal[1]/div[1]/section[1]/div[1]/footer[1]/lightning-button[2]/button[1]")).click();
-    	Thread.sleep(2000);
-    	String error_msg="Please select the file first.";
-    	WebElement error= driver.findElement(By.xpath("//div[@role=\"alert\"]"));
-    	String doc_error=error.getAttribute("textContent");
-    	if(error.isEnabled() && doc_error.contains("Please select the file first."));
-    	
-    	System.out.println("error message found, empty can not be uploaded.");
-    			
-    	Thread.sleep(6000);
-    	WebElement upload= driver.findElement(By.xpath("//span[@class='slds-file-selector__button slds-button slds-button_neutral']"));
-    	upload.sendKeys("C:\\bug_img.png");
-    	Thread.sleep(3000);
-    	 Select doc_select= new Select(driver.findElement(By.xpath("//button[@aria-haspopup='listbox' ]")));
-         doc_select.deselectByIndex(0);
-         driver.findElement(By.xpath("/html[1]/body[1]/div[3]/c-ib-psp-forms[1]/lightning-layout[1]/slot[1]/lightning-layout-item[2]/slot[1]/lightning-layout-item[1]/slot[1]/c-ib-psp-documents-section[1]/c-custom-modal[1]/div[1]/section[1]/div[1]/footer[1]/lightning-button[2]/button[1]")).click();
-         
-     }
  }
-         /*driver.findElement(By.xpath("//input[@id=\"input-64\"]")).sendKeys("100");
-         driver.findElement(By.xpath("//input[@id=\"input-65\"]")).sendKeys("100");
-         driver.findElement(By.xpath("//input[@id=\"input-66\"]")).sendKeys("100");
-         driver.findElement(By.xpath("//input[@id=\"input-67\"]")).sendKeys("100");
-         driver.findElement(By.xpath("//input[@id=\"input-57\"]")).sendKeys("100");
-         driver.findElement(By.xpath("//input[@id=\"input-71\"]")).sendKeys("100");
-         driver.findElement(By.xpath("//input[@id=\"input-72\"]")).sendKeys("100");
-         driver.findElement(By.xpath("//input[@id=\"input-73\"]")).sendKeys("100");
-         driver.findElement(By.xpath("//input[@id=\"input-74\"]")).sendKeys("100");
-         driver.findElement(By.xpath("//input[@id=\"input-75\"]")).sendKeys("100");
-         driver.findElement(By.xpath("//input[@id=\"input-78\"]")).sendKeys("100");
-         driver.findElement(By.xpath("//input[@id=\"input-79\"]")).sendKeys("100");
-         driver.findElement(By.xpath("//input[@id=\"input-80\"]")).sendKeys("100");
-         driver.findElement(By.xpath("//input[@id=\"input-81\"]")).sendKeys("100");
-         driver.findElement(By.xpath("//input[@id=\"input-82\"]")).sendKeys("100");
-         driver.findElement(By.xpath("//input[@id=\"input-85\"]")).sendKeys("100");
-         driver.findElement(By.xpath("//input[@id=\"input-86\"]")).sendKeys("100");
-         driver.findElement(By.xpath("//input[@id=\"input-87\"]")).sendKeys("100");
-         driver.findElement(By.xpath("//input[@id=\"input-88\"]")).sendKeys("100");
-         driver.findElement(By.xpath("//input[@id=\"input-89\"]")).sendKeys("100");
-         driver.findElement(By.xpath("//input[@id=\"input-92\"]")).sendKeys("100");
-         driver.findElement(By.xpath("//input[@id=\"input-93\"]")).sendKeys("100");
-         driver.findElement(By.xpath("//input[@id=\"input-94\"]")).sendKeys("100");
-         driver.findElement(By.xpath("//input[@id=\"input-95\"]")).sendKeys("100");
-         driver.findElement(By.xpath("//input[@id=\"input-96\"]")).sendKeys("100");
-         driver.findElement(By.xpath("//input[@id=\"input-99\"]")).sendKeys("100");
-         driver.findElement(By.xpath("//input[@id=\"input-100\"]")).sendKeys("100");
-         driver.findElement(By.xpath("//input[@id=\"input-101\"]")).sendKeys("100");
-         driver.findElement(By.xpath("//input[@id=\"input-102\"]")).sendKeys("100");
-         driver.findElement(By.xpath("//input[@id=\"input-103\"]")).sendKeys("100");
-         driver.findElement(By.xpath("//input[@id=\"input-106\"]")).sendKeys("100");
-         driver.findElement(By.xpath("//input[@id=\"input-107\"]")).sendKeys("100");
-         driver.findElement(By.xpath("//input[@id=\"input-108\"]")).sendKeys("100");
-         driver.findElement(By.xpath("//input[@id=\"input-109\"]")).sendKeys("100");
-         driver.findElement(By.xpath("//input[@id=\"input-110\"]")).sendKeys("100");8/
-         
-         teacher_support_next();
-         Thread.sleep(5000);
-         
-         
-         
-         
-         
-         
-         
-         
-     }
- }
- 
-     
-     /*
-     @Test(dataProvider="Schoolprofilefirsttime", dataProviderClass= School_profile_first_time.class)
-     public void legalRegister_name(String schoolname, String website, String phone) throws InterruptedException {
-    	 
-    		 Thread.sleep(3000);
-    		 
-    		 driver.findElement(By.xpath("//input[@id=\"input-11\"]")).sendKeys(schoolname);
-    		 Thread.sleep(2000);
-    		 JavascriptExecutor js= (JavascriptExecutor)driver;
-    		 js.executeScript("window.scrollBy(0,950)");
-    	 
-    	 
-    		 driver.findElement(By.xpath("/html/body/div[4]/c-ib-school-profile/lightning-layout/slot/lightning-layout-item[2]/slot/div[1]/c-ib-school-profile-information/div/div[6]/div[1]/lightning-radio-group/fieldset/div/span[1]/label/span[1]")).click();
-    		 Thread.sleep(2000);
-    		 WebElement web= driver.findElement(By.xpath("//input[@id=\"input-73\"]"));
-    		 web.clear();
-    		 web.sendKeys(website);
-    		 Thread.sleep(2000);
-    		 driver.findElement(By.xpath("//input[@id=\"input-24\"]")).sendKeys(phone);
-    	 
-    	 
-     }
-     
-    	 @Test
-    	 public void schoold() throws InterruptedException {
-    		 WebElement element= driver.findElement(By.xpath("/html/body/div[4]/c-ib-school-profile/lightning-layout/slot/lightning-layout-item[2]/slot/div[1]/c-ib-school-profile-information/div/div[7]/div[1]/lightning-combobox/div[1]/lightning-base-combobox/div/div[1]"));
-    	    	JavascriptExecutor exe= (JavascriptExecutor)driver;
-    	    	exe.executeScript("arguments[0].click();", element);
-    	    	element.sendKeys("Algeria(+213)");
-    	    	Thread.sleep(1000);
-    	    	WebElement selectMyElement = driver.findElement(this.getObject(By.xpath("/html/body/div[4]/c-ib-school-profile/lightning-layout/slot/lightning-layout-item[2]/slot/div[1]/c-ib-school-profile-information/div/div[7]/div[1]/lightning-combobox/div[1]/lightning-base-combobox/div/div[1]"))); 
-    	    	selectMyElement.click();
-    	    	Actions action= new Actions(driver);
-    	    	
-    	    	action.sendKeys("Algeria(+213)");
-    	    	 Thread.sleep(3000);
-    	    	
-    		 WebElement school= driver.findElement(By.id("combobox-button-27"));
-        	 school.click();
-        	 
-        	 JavascriptExecutor exe1= (JavascriptExecutor)driver;
- 	    	exe1.executeScript("arguments[0].click();", school);
- 	    	element.sendKeys("2020");
- 	    	 Thread.sleep(3000);
-        	 
-
-        	
-  			
-    	 }
-    	
-    	 
-    	private By getObject(By xpath) {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-		@Test
-    	public void school_year() {
-			
-      String actualString = driver.findElement(By.xpath("/html/body/div[4]/c-ib-school-profile/lightning-layout/slot/lightning-layout-item[2]/slot/div[1]/c-ib-school-profile-information/div/div[9]/div")).getText();
-   	  assertTrue(actualString.contains("The school is years old."));
-    	 {
-    	System.out.println("Text!" +actualString+ "is present.");
-    	}
-    	 
-    	}
-    	      @Test
-    	      public void school_txt() {
-    	   // isDisplayed() to get text
-    	    	  
-    	      boolean eleSelected= driver.findElement(By.xpath("/html/body/div[4]/c-ib-school-profile/lightning-layout/slot/lightning-layout-item[2]/slot/div[1]/c-ib-school-profile-information/div/div[9]/div/p")).isDisplayed();
-    	      
-    	         System.out.println("Text: "  +eleSelected+ " is displayed on the page. ");
-    	      } 
-    	      
-    	}
-    	*/
-     
-    
-	
-
-
+ */
+        
