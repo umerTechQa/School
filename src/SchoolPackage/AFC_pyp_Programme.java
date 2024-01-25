@@ -1,8 +1,6 @@
 package SchoolPackage;
-
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
-
 import java.awt.Desktop.Action;
 import java.time.Duration;
 import java.util.List;
